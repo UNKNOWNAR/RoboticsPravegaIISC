@@ -93,39 +93,6 @@
                     </div>
                 </div>
                 <aside class="notes">
-                    Walk through each metric card as it appears. Highlight the impressive 28% growth in net income
-                    and the 31% increase in earnings per share. These numbers demonstrate strong operational efficiency
-                    and effective cost management.
-                </aside>
-            </section>
-
-            <!-- Code Sample with Syntax Highlighting -->
-            <section data-background-color="#16213e">
-                <h2>Automated Risk Assessment System</h2>
-                <p>Python implementation of our ML-powered credit risk model:</p>
-                <pre><code class="python" data-line-numbers="1-2|4-6|8-11|13-15">
-import pandas as pd
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-
-# Load historical transaction data
-data = pd.read_csv('customer_transactions.csv')
-features = data[['income', 'debt_ratio', 'payment_history', 'credit_score']]
-
-# Train risk assessment model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(features, data['default_indicator'])
-risk_scores = model.predict_proba(features)[:, 1]
-
-# Calculate expected loss
-expected_loss = np.sum(risk_scores * data['exposure_amount'])
-print(f"Portfolio Expected Loss: ${expected_loss:,.2f}")
-                </code></pre>
-                <p class="fragment" style="margin-top: 20px; font-size: 0.8em;">
-                    This model processes <strong>1.2M transactions/day</strong> with <strong>94% accuracy</strong>
-                </p>
-                <aside class="notes">
-                    Our automated risk assessment system uses machine learning to evaluate credit risk in real-time.
                     The model analyzes key financial indicators and provides accurate risk scores. This has reduced
                     default rates by 15% and improved our loan approval process efficiency.
                 </aside>
@@ -197,90 +164,49 @@ print(f"Portfolio Expected Loss: ${expected_loss:,.2f}")
                     </div>
                 </div>
                 <aside class="notes">
-                    Revenue segments show strong performance across all divisions. Retail banking continues
-                    to be our largest contributor at 45%. Note the significant growth in corporate banking,
-                    which increased 35% YoY due to our expanded commercial lending programs.
-                </aside>
-            </section>
 
-            <!-- JavaScript Code Example -->
-            <section data-background-color="#16213e">
-                <h2>Real-Time Transaction Monitoring</h2>
-                <p>JavaScript implementation for fraud detection dashboard:</p>
-                <pre><code class="javascript" data-line-numbers="1-3|5-10|12-17">
-// Real-time transaction monitoring system
-const fraudDetectionThreshold = 0.85;
-const transactionStream = new WebSocket('wss://api.bank.com/transactions');
+                    <!-- Future Outlook -->
+                    <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+                        <h2>Q1 2026 Outlook</h2>
+                        <ul class="outlook-list">
+                            <li class="fragment fade-in-then-semi-out">
+                                <strong>Revenue Growth:</strong> Projected 18-22% YoY increase
+                            </li>
+                            <li class="fragment fade-in-then-semi-out">
+                                <strong>Digital Expansion:</strong> Launch mobile banking 2.0 platform
+                            </li>
+                            <li class="fragment fade-in-then-semi-out">
+                                <strong>Market Entry:</strong> Expansion into Southeast Asian markets
+                            </li>
+                            <li class="fragment fade-in-then-semi-out">
+                                <strong>Technology Investment:</strong> $150M in AI and blockchain initiatives
+                            </li>
+                            <li class="fragment fade-in-then-semi-out">
+                                <strong>Sustainability:</strong> 50% reduction in carbon footprint
+                            </li>
+                        </ul>
+                        <aside class="notes">
+                            Looking ahead to Q1 2026, we're optimistic about continued growth. The mobile banking 2.0
+                            platform will launch in January and is expected to drive significant user engagement.
+                            Our Southeast Asian expansion represents a major growth opportunity with 200M potential
+                            customers.
+                        </aside>
+                    </section>
 
-// Monitor incoming transactions
-transactionStream.onmessage = (event) => {
-    const transaction = JSON.parse(event.data);
-    const riskScore = assessRiskScore(transaction);
-    
-    if (riskScore > fraudDetectionThreshold) {
-        flagForReview(transaction);
-        notifySecurityTeam(transaction);
-    }
-};
-
-// Machine learning risk assessment
-function assessRiskScore(transaction) {
-    return mlModel.predict({
-        amount: transaction.amount,
-        location: transaction.location,
-        merchantCategory: transaction.merchant_category,
-        userBehaviorPattern: getUserPattern(transaction.userId)
-    });
-}
-                </code></pre>
-                <aside class="notes">
-                    Our real-time fraud detection system monitors all transactions as they occur. The system
-                    uses machine learning to identify suspicious patterns and automatically flags high-risk
-                    transactions for review. This has reduced fraud losses by 67% compared to last year.
-                </aside>
-            </section>
-
-            <!-- Future Outlook -->
-            <section data-background-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
-                <h2>Q1 2026 Outlook</h2>
-                <ul class="outlook-list">
-                    <li class="fragment fade-in-then-semi-out">
-                        <strong>Revenue Growth:</strong> Projected 18-22% YoY increase
-                    </li>
-                    <li class="fragment fade-in-then-semi-out">
-                        <strong>Digital Expansion:</strong> Launch mobile banking 2.0 platform
-                    </li>
-                    <li class="fragment fade-in-then-semi-out">
-                        <strong>Market Entry:</strong> Expansion into Southeast Asian markets
-                    </li>
-                    <li class="fragment fade-in-then-semi-out">
-                        <strong>Technology Investment:</strong> $150M in AI and blockchain initiatives
-                    </li>
-                    <li class="fragment fade-in-then-semi-out">
-                        <strong>Sustainability:</strong> 50% reduction in carbon footprint
-                    </li>
-                </ul>
-                <aside class="notes">
-                    Looking ahead to Q1 2026, we're optimistic about continued growth. The mobile banking 2.0
-                    platform will launch in January and is expected to drive significant user engagement.
-                    Our Southeast Asian expansion represents a major growth opportunity with 200M potential customers.
-                </aside>
-            </section>
-
-            <!-- Q&A Slide -->
-            <section data-background-color="#1a1a2e">
-                <h1>Questions & Discussion</h1>
-                <p style="font-size: 1.5em; margin-top: 50px;">Thank you for your attention</p>
-                <div style="margin-top: 80px; font-size: 0.9em;">
-                    <p>📧 Contact: 24f3001857@ds.study.iitm.ac.in</p>
-                    <p>🌐 Investor Relations: ir.financialinstitution.com</p>
-                </div>
-                <aside class="notes">
-                    Open the floor for questions. Be prepared to discuss topics like: margin sustainability,
-                    risk management strategies, capital allocation plans, and competitive positioning.
-                    Have the detailed financial tables ready for reference.
-                </aside>
-            </section>
+                    <!-- Q&A Slide -->
+                    <section data-background-color="#1a1a2e">
+                        <h1>Questions & Discussion</h1>
+                        <p style="font-size: 1.5em; margin-top: 50px;">Thank you for your attention</p>
+                        <div style="margin-top: 80px; font-size: 0.9em;">
+                            <p>📧 Contact: 24f3001857@ds.study.iitm.ac.in</p>
+                            <p>🌐 Investor Relations: ir.financialinstitution.com</p>
+                        </div>
+                        <aside class="notes">
+                            Open the floor for questions. Be prepared to discuss topics like: margin sustainability,
+                            risk management strategies, capital allocation plans, and competitive positioning.
+                            Have the detailed financial tables ready for reference.
+                        </aside>
+                    </section>
 
         </div>
     </div>
