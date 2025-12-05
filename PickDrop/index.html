@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick & Drop Robot - Technical Report</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --accent-color: #2563eb;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: white;
+        }
+
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+
+            .no-break,
+            .section,
+            .image-container,
+            .info-table,
+            .member-table,
+            .feature-grid,
+            .feature-card {
+                page-break-inside: avoid !important;
+            }
+
+            h1,
+            h2,
+            h3 {
+                page-break-after: avoid;
+            }
+
+            ul,
+            ol {
+                page-break-inside: avoid !important;
+            }
+
+            li {
+                page-break-inside: avoid !important;
+            }
+
+            p {
+                orphans: 3;
+                widows: 3;
+            }
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 35px;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cover-tagline {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .cover-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 45px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .team-box {
+            border: 1px solid var(--border-color);
+            padding: 30px 45px;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .team-box h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .team-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .team-row .label {
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 100px;
+        }
+
+        .member-section {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .member {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .member-role {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .member-phone {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            padding: 50px;
+        }
+
+        .toc h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .toc-list {
+            list-style: none;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            font-size: 13px;
+        }
+
+        .toc-number {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-right: 12px;
+            min-width: 22px;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 40px 50px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h1.section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        h2 {
+            font-size: 15px;
+            color: var(--primary-color);
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 13px;
+            color: var(--text-color);
+            margin: 15px 0 8px;
+            font-weight: 600;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 15px;
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        li strong {
+            color: var(--primary-color);
+        }
+
+        /* ===== TABLES ===== */
+        .info-table,
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        .info-table th,
+        .info-table td,
+        .member-table th,
+        .member-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-table th,
+        .member-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .info-table th {
+            width: 30%;
+        }
+
+        .info-table tr:nth-child(even) td,
+        .member-table tr:nth-child(even) td {
+            background: var(--bg-secondary);
+        }
+
+        /* ===== IMAGES ===== */
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image-container .caption {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* ===== FEATURES ===== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .feature-card {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-color);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 11px;
+            color: var(--text-light);
+            margin: 0;
+            text-align: left;
+        }
+
+        /* ===== REFERENCES ===== */
+        .references ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .references li {
+            padding: 10px 12px;
+            border-left: 3px solid var(--accent-color);
+            background: var(--bg-secondary);
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        /* ===== FOOTER ===== */
+        .report-footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+        }
+
+        .report-footer p {
+            margin: 2px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== COVER PAGE ===== -->
+    <div class="cover-page">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="Jadavpur University Logo">
+        </div>
+        <div class="cover-title">Pick & Drop Robot</div>
+        <div class="cover-tagline">"Grip. Lift. Deliver."</div>
+        <div class="cover-subtitle">Technical Report — Pravega 2025</div>
+
+        <div class="team-box">
+            <h3>Project Team</h3>
+
+            <div class="team-row">
+                <span class="label">Team Name:</span>
+                <span>amiarinjaysarkar</span>
+            </div>
+            <div class="team-row">
+                <span class="label">Institution:</span>
+                <span>Jadavpur University</span>
+            </div>
+
+            <div class="member-section">
+                <div class="member">
+                    <span class="member-name">Arinjay Sarkar</span>
+                    <span class="member-role"> — Team Leader</span><br>
+                    <span class="member-phone">📞 +91 7003828489</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Saptarshi Nanda</span><br>
+                    <span class="member-phone">📞 +91 8617471550</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Soureen Majumder</span><br>
+                    <span class="member-phone">📞 +91 9123779351</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== TABLE OF CONTENTS ===== -->
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul class="toc-list">
+            <li><a href="#section-1"><span class="toc-number">01</span> Team Details</a></li>
+            <li><a href="#section-2"><span class="toc-number">02</span> Abstract</a></li>
+            <li><a href="#section-3"><span class="toc-number">03</span> Design Concept</a></li>
+            <li><a href="#section-4"><span class="toc-number">04</span> Working Principle</a></li>
+            <li><a href="#section-5"><span class="toc-number">05</span> Innovation & Special Features</a></li>
+            <li><a href="#section-6"><span class="toc-number">06</span> References</a></li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Section 1: Team Details -->
+        <div id="section-1" class="section">
+            <h1 class="section-title">1. Team Details</h1>
+            <table class="info-table">
+                <tr>
+                    <th>Team Name</th>
+                    <td>amiarinjaysarkar</td>
+                </tr>
+                <tr>
+                    <th>College / Institute</th>
+                    <td>Jadavpur University</td>
+                </tr>
+                <tr>
+                    <th>Competition</th>
+                    <td>Pick & Drop — Pravega 2025, IISc Bangalore</td>
+                </tr>
+            </table>
+
+            <h3>Team Members</h3>
+            <table class="member-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Contact</th>
+                </tr>
+                <tr>
+                    <td><strong>Arinjay Sarkar</strong></td>
+                    <td>Team Leader</td>
+                    <td>+91 7003828489</td>
+                </tr>
+                <tr>
+                    <td><strong>Saptarshi Nanda</strong></td>
+                    <td>Member</td>
+                    <td>+91 8617471550</td>
+                </tr>
+                <tr>
+                    <td><strong>Soureen Majumder</strong></td>
+                    <td>Member</td>
+                    <td>+91 9123779351</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 2: Abstract -->
+        <div id="section-2" class="section">
+            <h1 class="section-title">2. Abstract</h1>
+            <p>This technical report presents the design and development of an autonomous Pick & Drop Robot engineered
+                to identify, pick up, and accurately place multiple objects into designated target zones. The robot is
+                designed for the Pravega 2025 competition at IISc Bangalore, where precision, speed, and reliability are
+                critical success factors.</p>
+
+            <p>The robot features a robust 4-wheeled chassis with a servo-actuated gripper mechanism capable of handling
+                various objects including bottles, cubes, and blocks. The system integrates ultrasonic sensors and
+                infrared sensors for object detection and localization, combined with a precise motor control system for
+                accurate positioning. The modular design allows for rapid adjustments and optimization during
+                competition.</p>
+
+            <p>Key objectives include maximizing correct placements, minimizing cycle time, and achieving autonomous
+                operation with minimal human intervention.</p>
+
+            <div class="image-container">
+                <img src="images/arena_diagram.png" alt="Competition Arena Layout">
+                <div class="caption">Figure 1: Competition Arena Layout — Objects placed randomly with designated drop
+                    zone</div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 3: Design Concept -->
+        <div id="section-3" class="section">
+            <h1 class="section-title">3. Design Concept</h1>
+
+            <h2>3.1 Mechanical Design</h2>
+            <p>The robot is built on a sturdy aluminum/acrylic chassis with a rectangular footprint for stability. The
+                mechanical system consists of three main subsystems:</p>
+
+            <ul>
+                <li><strong>Mobility Platform:</strong> 4-wheeled differential drive with DC geared motors for precise
+                    navigation and stability during pick-and-place operations.</li>
+                <li><strong>Lifting Mechanism:</strong> Vertical linear actuator or articulated arm with servo motors
+                    for height adjustment. Maximum reach designed to access objects at various heights.</li>
+                <li><strong>Gripper System:</strong> Servo-actuated parallel jaw gripper with rubber padding for secure
+                    grip on diverse objects (bottles, cubes, blocks). Gripper opening adjustable via servo position.
+                </li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/robot_structure.png" alt="Robot Structure Diagram">
+                <div class="caption">Figure 2: Robot Structure — Labeled component diagram showing chassis, arm, and
+                    gripper assembly</div>
+            </div>
+
+            <h2>3.2 Electronics & Components</h2>
+            <ul>
+                <li><strong>Arduino Mega 2560:</strong> Main microcontroller for sensor processing and motor control.
+                </li>
+                <li><strong>L298N Motor Driver (×2):</strong> Controls DC motors for wheels and lifting mechanism.</li>
+                <li><strong>Servo Motors (×3):</strong> For gripper actuation and arm positioning.</li>
+                <li><strong>Ultrasonic Sensors (HC-SR04 ×3):</strong> For obstacle detection and object distance
+                    measurement.</li>
+                <li><strong>IR Sensors (×4):</strong> For edge detection and arena boundary recognition.</li>
+                <li><strong>Color Sensor (TCS3200):</strong> Optional — for object identification by color.</li>
+                <li><strong>Power Source:</strong> 12V LiPo Battery (2200mAh) for motors, 5V regulator for logic
+                    circuits.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/gripper_cad.png" alt="Gripper CAD Design">
+                <div class="caption">Figure 3: Gripper Mechanism CAD — Servo-actuated parallel jaw design</div>
+            </div>
+
+            <div class="page-break"></div>
+
+            <h2>3.3 Control Strategy</h2>
+            <p>The robot employs a state-machine based control architecture with the following operational states:</p>
+            <ol>
+                <li><strong>SEARCH:</strong> Navigate arena to locate objects using ultrasonic sensors.</li>
+                <li><strong>APPROACH:</strong> Move towards detected object with precise positioning.</li>
+                <li><strong>PICK:</strong> Lower gripper, close jaws, lift object securely.</li>
+                <li><strong>TRANSPORT:</strong> Navigate to drop zone while maintaining object stability.</li>
+                <li><strong>PLACE:</strong> Position over target, lower arm, release object gently.</li>
+                <li><strong>RETURN:</strong> Resume search for next object.</li>
+            </ol>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 4: Working Principle -->
+        <div id="section-4" class="section">
+            <h1 class="section-title">4. Working Principle</h1>
+
+            <h2>4.1 Movement & Navigation</h2>
+            <p>The robot uses differential drive with 4 DC geared motors. Independent control of left and right wheel
+                pairs enables:</p>
+            <ul>
+                <li><strong>Forward/Backward Motion:</strong> Equal PWM to all motors.</li>
+                <li><strong>Turning:</strong> Differential speed between left and right wheels.</li>
+                <li><strong>Pivot Turn:</strong> Opposite rotation of wheel pairs for in-place rotation.</li>
+            </ul>
+            <p>Navigation is sensor-guided using ultrasonic readings to detect objects and IR sensors to recognize arena
+                boundaries, preventing the robot from exiting the competition area.</p>
+
+            <h2>4.2 Sensing & Object Detection</h2>
+            <p>The sensing system operates on multiple levels:</p>
+            <ul>
+                <li><strong>Distance Sensing:</strong> Three ultrasonic sensors (front, left, right) continuously scan
+                    for objects within range (2cm–400cm).</li>
+                <li><strong>Edge Detection:</strong> IR sensors mounted at chassis corners detect arena boundaries
+                    (white/black surface transitions).</li>
+                <li><strong>Object Alignment:</strong> Front-facing sensor array ensures robot approaches object head-on
+                    for optimal grip.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/control_system.png" alt="Control System Architecture">
+                <div class="caption">Figure 4: Control System Block Diagram — Sensor inputs, processing, and actuator
+                    outputs</div>
+            </div>
+
+            <h2>4.3 Control Logic & Task Execution</h2>
+            <p>The Arduino executes a decision tree algorithm:</p>
+            <ol>
+                <li><strong>Initialization:</strong> Calibrate sensors, set gripper to open position, arm to neutral.
+                </li>
+                <li><strong>Object Search:</strong> Rotate and scan using ultrasonics; lock onto nearest object.</li>
+                <li><strong>Approach Sequence:</strong> Move towards object; slow down when within 15cm.</li>
+                <li><strong>Pick Sequence:</strong> Stop at 5cm, lower arm, close gripper (verify grip via current
+                    sensing or limit switch).</li>
+                <li><strong>Transport:</strong> Raise arm to safe height, navigate to drop zone (either pre-programmed
+                    coordinates or sensor-guided).</li>
+                <li><strong>Drop Sequence:</strong> Position over target, lower arm, open gripper, raise arm.</li>
+                <li><strong>Loop:</strong> Return to search state until time limit or all objects placed.</li>
+            </ol>
+
+            <h2>4.4 Motor Control Table</h2>
+            <table class="info-table">
+                <tr>
+                    <th>Action</th>
+                    <th>Left Motors</th>
+                    <th>Right Motors</th>
+                    <th>Arm/Gripper</th>
+                </tr>
+                <tr>
+                    <td>Forward</td>
+                    <td>Forward PWM</td>
+                    <td>Forward PWM</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Turn Left</td>
+                    <td>Low/Stop</td>
+                    <td>Forward</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Turn Right</td>
+                    <td>Forward</td>
+                    <td>Low/Stop</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td>Pick Object</td>
+                    <td>Stop</td>
+                    <td>Stop</td>
+                    <td>Lower, Close, Raise</td>
+                </tr>
+                <tr>
+                    <td>Drop Object</td>
+                    <td>Stop</td>
+                    <td>Stop</td>
+                    <td>Lower, Open, Raise</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 5: Innovation & Features -->
+        <div id="section-5" class="section">
+            <h1 class="section-title">5. Innovation & Special Features</h1>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Adaptive Grip Force</h4>
+                    <p>Servo-controlled gripper adjusts closure based on object size, preventing damage to delicate
+                        objects while ensuring secure hold.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Multi-Object Detection</h4>
+                    <p>Ultrasonic array scans in sweeping pattern to identify multiple objects and prioritize nearest
+                        target for efficient cycles.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Modular Arm Design</h4>
+                    <p>Quick-release mounting allows rapid gripper swaps for different object types during competition
+                        debugging.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Fail-Safe Positioning</h4>
+                    <p>If grip verification fails, robot repositions and reattempts pick sequence to minimize dropped
+                        objects.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Low Center of Gravity</h4>
+                    <p>Battery and heavy components mounted at chassis base for stability during arm extension and
+                        object transport.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Speed Optimization</h4>
+                    <p>Path planning algorithm minimizes travel distance between objects and drop zone for faster cycle
+                        times.</p>
+                </div>
+            </div>
+
+            <h2>5.1 Proposed Enhancements</h2>
+            <p>Future iterations may incorporate:</p>
+            <ul>
+                <li>Camera-based object recognition for color/shape identification.</li>
+                <li>PID-controlled arm positioning for smoother, faster movements.</li>
+                <li>Bluetooth/WiFi telemetry for real-time debugging.</li>
+                <li>Encoder feedback on wheel motors for precise dead-reckoning navigation.</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 6: References -->
+        <div id="section-6" class="section references">
+            <h1 class="section-title">6. References</h1>
+            <ul>
+                <li>Pravega 2025 Pick & Drop Competition Rulebook — IISc Bangalore</li>
+                <li>Arduino Mega 2560 Technical Documentation</li>
+                <li>L298N Dual H-Bridge Motor Driver Datasheet</li>
+                <li>HC-SR04 Ultrasonic Sensor Specifications</li>
+                <li>SG90/MG996R Servo Motor Technical Data</li>
+                <li>Robotics: Modelling, Planning and Control — Siciliano et al.</li>
+                <li>Jadavpur University Robotics Club Technical Resources</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="report-footer">
+        <p><strong>Pick & Drop Robot — Technical Report</strong></p>
+        <p>Team amiarinjaysarkar | Jadavpur University | Pravega 2025 — IISc Bangalore</p>
+    </div>
+
+</body>
+
+</html>

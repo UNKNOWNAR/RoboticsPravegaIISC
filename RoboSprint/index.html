@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robo Sprint Robot - Technical Report</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --accent-color: #dc2626;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: white;
+        }
+
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+
+            .no-break,
+            .section,
+            .image-container,
+            .info-table,
+            .member-table,
+            .feature-grid,
+            .feature-card {
+                page-break-inside: avoid !important;
+            }
+
+            h1,
+            h2,
+            h3 {
+                page-break-after: avoid;
+            }
+
+            ul,
+            ol,
+            li {
+                page-break-inside: avoid !important;
+            }
+
+            p {
+                orphans: 3;
+                widows: 3;
+            }
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 35px;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cover-tagline {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .cover-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 45px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .team-box {
+            border: 1px solid var(--border-color);
+            padding: 30px 45px;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .team-box h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .team-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .team-row .label {
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 100px;
+        }
+
+        .member-section {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .member {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .member-role {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .member-phone {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            padding: 50px;
+        }
+
+        .toc h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .toc-list {
+            list-style: none;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            font-size: 13px;
+        }
+
+        .toc-number {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-right: 12px;
+            min-width: 22px;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 40px 50px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h1.section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        h2 {
+            font-size: 15px;
+            color: var(--primary-color);
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 13px;
+            color: var(--text-color);
+            margin: 15px 0 8px;
+            font-weight: 600;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 15px;
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        li strong {
+            color: var(--primary-color);
+        }
+
+        /* ===== TABLES ===== */
+        .info-table,
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        .info-table th,
+        .info-table td,
+        .member-table th,
+        .member-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-table th,
+        .member-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .info-table th {
+            width: 30%;
+        }
+
+        .info-table tr:nth-child(even) td,
+        .member-table tr:nth-child(even) td {
+            background: var(--bg-secondary);
+        }
+
+        /* ===== IMAGES ===== */
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image-container .caption {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* ===== FEATURES ===== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .feature-card {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-color);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 11px;
+            color: var(--text-light);
+            margin: 0;
+            text-align: left;
+        }
+
+        /* ===== REFERENCES ===== */
+        .references ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .references li {
+            padding: 10px 12px;
+            border-left: 3px solid var(--accent-color);
+            background: var(--bg-secondary);
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        /* ===== FOOTER ===== */
+        .report-footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+        }
+
+        .report-footer p {
+            margin: 2px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== COVER PAGE ===== -->
+    <div class="cover-page">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="Jadavpur University Logo">
+        </div>
+        <div class="cover-title">Robo Sprint</div>
+        <div class="cover-tagline">"Every millisecond counts."</div>
+        <div class="cover-subtitle">Technical Report — Pravega 2025</div>
+
+        <div class="team-box">
+            <h3>Project Team</h3>
+            <div class="team-row">
+                <span class="label">Team Name:</span>
+                <span>amiarinjaysarkar</span>
+            </div>
+            <div class="team-row">
+                <span class="label">Institution:</span>
+                <span>Jadavpur University</span>
+            </div>
+            <div class="member-section">
+                <div class="member">
+                    <span class="member-name">Arinjay Sarkar</span>
+                    <span class="member-role"> — Team Leader</span><br>
+                    <span class="member-phone">📞 +91 7003828489</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Saptarshi Nanda</span><br>
+                    <span class="member-phone">📞 +91 8617471550</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Soureen Majumder</span><br>
+                    <span class="member-phone">📞 +91 9123779351</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== TABLE OF CONTENTS ===== -->
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul class="toc-list">
+            <li><a href="#section-1"><span class="toc-number">01</span> Team Details</a></li>
+            <li><a href="#section-2"><span class="toc-number">02</span> Abstract</a></li>
+            <li><a href="#section-3"><span class="toc-number">03</span> Design Concept</a></li>
+            <li><a href="#section-4"><span class="toc-number">04</span> Working Principle</a></li>
+            <li><a href="#section-5"><span class="toc-number">05</span> Innovation & Special Features</a></li>
+            <li><a href="#section-6"><span class="toc-number">06</span> References</a></li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Section 1: Team Details -->
+        <div id="section-1" class="section">
+            <h1 class="section-title">1. Team Details</h1>
+            <table class="info-table">
+                <tr>
+                    <th>Team Name</th>
+                    <td>amiarinjaysarkar</td>
+                </tr>
+                <tr>
+                    <th>College / Institute</th>
+                    <td>Jadavpur University</td>
+                </tr>
+                <tr>
+                    <th>Competition</th>
+                    <td>Robo Sprint — Pravega 2025, IISc Bangalore</td>
+                </tr>
+            </table>
+
+            <h3>Team Members</h3>
+            <table class="member-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Contact</th>
+                </tr>
+                <tr>
+                    <td><strong>Arinjay Sarkar</strong></td>
+                    <td>Team Leader</td>
+                    <td>+91 7003828489</td>
+                </tr>
+                <tr>
+                    <td><strong>Saptarshi Nanda</strong></td>
+                    <td>Member</td>
+                    <td>+91 8617471550</td>
+                </tr>
+                <tr>
+                    <td><strong>Soureen Majumder</strong></td>
+                    <td>Member</td>
+                    <td>+91 9123779351</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 2: Abstract -->
+        <div id="section-2" class="section">
+            <h1 class="section-title">2. Abstract</h1>
+            <p>This technical report presents the design and development of a high-performance obstacle course racing
+                robot for the Robo Sprint competition at Pravega 2025, IISc Bangalore. The robot is engineered to
+                navigate a challenging zig-zag track featuring ramps, tunnels, and speed breakers with maximum speed
+                while maintaining stability and control.</p>
+
+            <p>The robot features a robust 4-wheeled chassis with integrated suspension system, high-torque geared DC
+                motors, and a low center of gravity design for enhanced stability during high-speed maneuvers. The
+                control system employs an Arduino-based architecture with optional gyroscope/IMU feedback for stability
+                control and obstacle detection sensors for collision avoidance.</p>
+
+            <p>Key design objectives include minimizing completion time, maintaining traction on varied terrain, and
+                achieving smooth navigation through obstacles without penalties. The modular design allows for rapid
+                adjustments between practice runs and competition.</p>
+
+            <div class="image-container">
+                <img src="images/arena_diagram.png" alt="Competition Arena Layout">
+                <div class="caption">Figure 1: Robo Sprint Arena — Zig-zag course with ramps, tunnels, and speed
+                    breakers</div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 3: Design Concept -->
+        <div id="section-3" class="section">
+            <h1 class="section-title">3. Design Concept</h1>
+
+            <h2>3.1 Mechanical Design</h2>
+            <p>The robot is built on a lightweight yet rigid aluminum/acrylic chassis optimized for speed and stability.
+                The mechanical system incorporates:</p>
+
+            <ul>
+                <li><strong>Chassis Frame:</strong> Low-profile rectangular frame with reinforced mounting points for
+                    motors and electronics. Designed to minimize weight while maximizing structural rigidity.</li>
+                <li><strong>Suspension System:</strong> Independent suspension on all four wheels using spring-loaded
+                    shock absorbers to maintain wheel contact on uneven terrain and absorb impacts from ramps and speed
+                    breakers.</li>
+                <li><strong>Wheel Assembly:</strong> Large-diameter rubber wheels with high-grip treads for maximum
+                    traction. Wheels are directly coupled to motor shafts for efficient power transfer.</li>
+                <li><strong>Bumper Protection:</strong> Front and rear bumpers to protect components during obstacle
+                    impacts and tunnel navigation.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/robot_structure.png" alt="Robot Structure Diagram">
+                <div class="caption">Figure 2: Robot Structure — Side view showing chassis, suspension, and component
+                    layout</div>
+            </div>
+
+            <h2>3.2 Electronics & Components</h2>
+            <ul>
+                <li><strong>Arduino Uno/Nano:</strong> Main microcontroller for motor control and sensor processing.
+                </li>
+                <li><strong>L298N Motor Driver (×2):</strong> Dual H-bridge drivers for independent 4-wheel control.
+                </li>
+                <li><strong>DC Geared Motors (×4):</strong> High-torque 300-500 RPM motors with metal gearboxes for
+                    speed and torque balance.</li>
+                <li><strong>Ultrasonic Sensors (HC-SR04 ×2):</strong> Front-facing for obstacle detection and collision
+                    avoidance.</li>
+                <li><strong>MPU6050 Gyroscope/IMU:</strong> For stability monitoring and tilt detection on ramps.</li>
+                <li><strong>IR Sensors (×2):</strong> Optional line detection for semi-autonomous navigation.</li>
+                <li><strong>Power Source:</strong> 11.1V LiPo Battery (2200mAh, 25C) for high current delivery during
+                    acceleration.</li>
+                <li><strong>Wireless Module (HC-05/NRF24L01):</strong> For remote control operation.</li>
+            </ul>
+
+            <div class="page-break"></div>
+
+            <div class="image-container">
+                <img src="images/chassis_cad.png" alt="Chassis CAD Design">
+                <div class="caption">Figure 3: Chassis CAD Model — Isometric view with suspension and motor mounts</div>
+            </div>
+
+            <h2>3.3 Control Strategy</h2>
+            <p>The robot supports both manual and semi-autonomous operation modes:</p>
+            <ul>
+                <li><strong>Manual Mode:</strong> Wireless remote control with proportional speed control via joystick
+                    inputs.</li>
+                <li><strong>Semi-Autonomous Mode:</strong> Ultrasonic sensors provide obstacle feedback; IMU assists
+                    with ramp stabilization.</li>
+                <li><strong>Speed Optimization:</strong> PWM-based motor control with acceleration curves to prevent
+                    wheel slip.</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 4: Working Principle -->
+        <div id="section-4" class="section">
+            <h1 class="section-title">4. Working Principle</h1>
+
+            <h2>4.1 Movement & Navigation</h2>
+            <p>The robot uses a 4-wheel drive (4WD) configuration with differential steering:</p>
+            <ul>
+                <li><strong>Forward/Backward:</strong> All four motors driven at equal PWM for maximum traction.</li>
+                <li><strong>Turning:</strong> Differential speed between left and right wheel pairs enables turning
+                    while moving.</li>
+                <li><strong>Pivot Turn:</strong> Opposite rotation of left/right pairs for sharp in-place turns.</li>
+                <li><strong>Speed Control:</strong> Variable PWM (0-255) allows fine speed adjustment from crawl to
+                    sprint.</li>
+            </ul>
+
+            <h2>4.2 Obstacle Handling</h2>
+            <p>The robot is designed to handle various arena obstacles:</p>
+            <ul>
+                <li><strong>Ramps:</strong> High-torque motors and low CoG prevent tipping. Suspension absorbs landing
+                    impact.</li>
+                <li><strong>Tunnels:</strong> Low-profile design (height ≤ tunnel clearance) allows smooth passage.</li>
+                <li><strong>Speed Breakers:</strong> Suspension system absorbs bumps; continuous power maintains
+                    momentum.</li>
+                <li><strong>Zig-Zag Path:</strong> Quick response steering and grippy wheels enable sharp turns at
+                    speed.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/control_system.png" alt="Control System Architecture">
+                <div class="caption">Figure 4: Control System Block Diagram — Sensor inputs and motor control flow</div>
+            </div>
+
+            <h2>4.3 Control Logic</h2>
+            <p>The Arduino executes the following control loop:</p>
+            <ol>
+                <li><strong>Input Processing:</strong> Read wireless commands (throttle, steering) and sensor data.</li>
+                <li><strong>Stability Check:</strong> IMU readings detect excessive tilt; reduce speed if unstable.</li>
+                <li><strong>Obstacle Detection:</strong> Ultrasonic distance < threshold triggers speed reduction.</li>
+                <li><strong>Motor Output:</strong> Calculate individual motor PWM based on steering input and speed.
+                </li>
+                <li><strong>Execute:</strong> Send PWM signals to motor drivers; repeat loop at 50Hz.</li>
+            </ol>
+
+            <h2>4.4 Motor Control Table</h2>
+            <table class="info-table">
+                <tr>
+                    <th>Action</th>
+                    <th>Left Motors</th>
+                    <th>Right Motors</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>Full Speed Forward</td>
+                    <td>255 PWM</td>
+                    <td>255 PWM</td>
+                    <td>Maximum acceleration</td>
+                </tr>
+                <tr>
+                    <td>Gradual Turn Left</td>
+                    <td>150 PWM</td>
+                    <td>255 PWM</td>
+                    <td>Maintains speed in turn</td>
+                </tr>
+                <tr>
+                    <td>Gradual Turn Right</td>
+                    <td>255 PWM</td>
+                    <td>150 PWM</td>
+                    <td>Maintains speed in turn</td>
+                </tr>
+                <tr>
+                    <td>Sharp Turn Left</td>
+                    <td>0/REV</td>
+                    <td>200 PWM</td>
+                    <td>For tight corners</td>
+                </tr>
+                <tr>
+                    <td>Emergency Stop</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>Instant brake</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 5: Innovation & Features -->
+        <div id="section-5" class="section">
+            <h1 class="section-title">5. Innovation & Special Features</h1>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Active Suspension</h4>
+                    <p>Spring-loaded shock absorbers on all wheels maintain traction over ramps and speed breakers.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Low Center of Gravity</h4>
+                    <p>Battery and heavy components mounted at chassis base prevent tipping on steep ramps.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>High-Grip Wheels</h4>
+                    <p>Custom rubber tread pattern maximizes grip on varied surfaces including smooth ramps.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>IMU Stabilization</h4>
+                    <p>MPU6050 gyroscope detects tilt angle; auto-reduces speed when approaching tip-over threshold.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Quick-Swap Battery</h4>
+                    <p>Slide-out battery mount enables rapid battery changes between runs without tools.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Collision Protection</h4>
+                    <p>Front bumper with ultrasonic sensors auto-slows robot before obstacle impact.</p>
+                </div>
+            </div>
+
+            <h2>5.1 Proposed Enhancements</h2>
+            <p>Future iterations may incorporate:</p>
+            <ul>
+                <li>PID-controlled speed for smoother acceleration and deceleration curves.</li>
+                <li>Encoder feedback for precise speed measurement and odometry.</li>
+                <li>Camera-based path detection for fully autonomous navigation.</li>
+                <li>Brushless motors for higher speed-to-weight ratio.</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 6: References -->
+        <div id="section-6" class="section references">
+            <h1 class="section-title">6. References</h1>
+            <ul>
+                <li>Pravega 2025 Robo Sprint Competition Rulebook — IISc Bangalore</li>
+                <li>Arduino Uno/Nano Technical Documentation</li>
+                <li>L298N Dual H-Bridge Motor Driver Datasheet</li>
+                <li>MPU6050 6-Axis Gyroscope/Accelerometer Specifications</li>
+                <li>HC-SR04 Ultrasonic Sensor Datasheet</li>
+                <li>LiPo Battery Safety and Usage Guidelines</li>
+                <li>Jadavpur University Robotics Club Technical Resources</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="report-footer">
+        <p><strong>Robo Sprint — Technical Report</strong></p>
+        <p>Team amiarinjaysarkar | Jadavpur University | Pravega 2025 — IISc Bangalore</p>
+    </div>
+
+</body>
+
+</html>

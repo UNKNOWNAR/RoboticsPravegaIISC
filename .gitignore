@@ -1,0 +1,39 @@
+# Virtual Environment
+venv/
+.venv/
+ENV/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# PDF files (generated, can be regenerated)
+# Uncomment if you don't want to track PDFs
+# *.pdf

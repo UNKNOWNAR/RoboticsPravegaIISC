@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tug of War Robot - Technical Report</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --accent-color: #7c3aed;
+            --text-color: #333;
+            --text-light: #666;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: white;
+        }
+
+        @media print {
+            .page-break {
+                page-break-before: always;
+            }
+
+            .no-break,
+            .section,
+            .image-container,
+            .info-table,
+            .member-table,
+            .feature-grid,
+            .feature-card {
+                page-break-inside: avoid !important;
+            }
+
+            h1,
+            h2,
+            h3 {
+                page-break-after: avoid;
+            }
+
+            ul,
+            ol,
+            li {
+                page-break-inside: avoid !important;
+            }
+
+            p {
+                orphans: 3;
+                widows: 3;
+            }
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 35px;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cover-tagline {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .cover-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 45px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .team-box {
+            border: 1px solid var(--border-color);
+            padding: 30px 45px;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .team-box h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .team-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .team-row .label {
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 100px;
+        }
+
+        .member-section {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .member {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .member-role {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .member-phone {
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            padding: 50px;
+        }
+
+        .toc h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .toc-list {
+            list-style: none;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--text-color);
+            display: flex;
+            font-size: 13px;
+        }
+
+        .toc-number {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-right: 12px;
+            min-width: 22px;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 40px 50px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h1.section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        h2 {
+            font-size: 15px;
+            color: var(--primary-color);
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 13px;
+            color: var(--text-color);
+            margin: 15px 0 8px;
+            font-weight: 600;
+        }
+
+        p {
+            text-align: justify;
+            margin-bottom: 12px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        ul,
+        ol {
+            margin-bottom: 15px;
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        li strong {
+            color: var(--primary-color);
+        }
+
+        /* ===== TABLES ===== */
+        .info-table,
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+        }
+
+        .info-table th,
+        .info-table td,
+        .member-table th,
+        .member-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-table th,
+        .member-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .info-table th {
+            width: 30%;
+        }
+
+        .info-table tr:nth-child(even) td,
+        .member-table tr:nth-child(even) td {
+            background: var(--bg-secondary);
+        }
+
+        /* ===== IMAGES ===== */
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image-container .caption {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* ===== FEATURES ===== */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .feature-card {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-color);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 11px;
+            color: var(--text-light);
+            margin: 0;
+            text-align: left;
+        }
+
+        /* ===== REFERENCES ===== */
+        .references ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .references li {
+            padding: 10px 12px;
+            border-left: 3px solid var(--accent-color);
+            background: var(--bg-secondary);
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        /* ===== FOOTER ===== */
+        .report-footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+        }
+
+        .report-footer p {
+            margin: 2px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== COVER PAGE ===== -->
+    <div class="cover-page">
+        <div class="logo-container">
+            <img src="images/logo.jpg" alt="Jadavpur University Logo">
+        </div>
+        <div class="cover-title">Tug of War Robot</div>
+        <div class="cover-tagline">"Pull harder. Think smarter."</div>
+        <div class="cover-subtitle">Technical Report — Pravega 2025</div>
+
+        <div class="team-box">
+            <h3>Project Team</h3>
+            <div class="team-row">
+                <span class="label">Team Name:</span>
+                <span>amiarinjaysarkar</span>
+            </div>
+            <div class="team-row">
+                <span class="label">Institution:</span>
+                <span>Jadavpur University</span>
+            </div>
+            <div class="member-section">
+                <div class="member">
+                    <span class="member-name">Arinjay Sarkar</span>
+                    <span class="member-role"> — Team Leader</span><br>
+                    <span class="member-phone">📞 +91 7003828489</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Saptarshi Nanda</span><br>
+                    <span class="member-phone">📞 +91 8617471550</span>
+                </div>
+                <div class="member">
+                    <span class="member-name">Soureen Majumder</span><br>
+                    <span class="member-phone">📞 +91 9123779351</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== TABLE OF CONTENTS ===== -->
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul class="toc-list">
+            <li><a href="#section-1"><span class="toc-number">01</span> Team Details</a></li>
+            <li><a href="#section-2"><span class="toc-number">02</span> Abstract</a></li>
+            <li><a href="#section-3"><span class="toc-number">03</span> Design Concept</a></li>
+            <li><a href="#section-4"><span class="toc-number">04</span> Working Principle</a></li>
+            <li><a href="#section-5"><span class="toc-number">05</span> Innovation & Special Features</a></li>
+            <li><a href="#section-6"><span class="toc-number">06</span> References</a></li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Section 1: Team Details -->
+        <div id="section-1" class="section">
+            <h1 class="section-title">1. Team Details</h1>
+            <table class="info-table">
+                <tr>
+                    <th>Team Name</th>
+                    <td>amiarinjaysarkar</td>
+                </tr>
+                <tr>
+                    <th>College / Institute</th>
+                    <td>Jadavpur University</td>
+                </tr>
+                <tr>
+                    <th>Competition</th>
+                    <td>Tug of War — Pravega 2025, IISc Bangalore</td>
+                </tr>
+            </table>
+
+            <h3>Team Members</h3>
+            <table class="member-table">
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Contact</th>
+                </tr>
+                <tr>
+                    <td><strong>Arinjay Sarkar</strong></td>
+                    <td>Team Leader</td>
+                    <td>+91 7003828489</td>
+                </tr>
+                <tr>
+                    <td><strong>Saptarshi Nanda</strong></td>
+                    <td>Member</td>
+                    <td>+91 8617471550</td>
+                </tr>
+                <tr>
+                    <td><strong>Soureen Majumder</strong></td>
+                    <td>Member</td>
+                    <td>+91 9123779351</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 2: Abstract -->
+        <div id="section-2" class="section">
+            <h1 class="section-title">2. Abstract</h1>
+            <p>This technical report presents the design and development of a high-torque Tug of War robot for the
+                Pravega 2025 competition at IISc Bangalore. The robot is engineered to generate maximum pulling force
+                while maintaining superior traction on the arena surface, enabling it to outpull opponents in
+                head-to-head elimination rounds.</p>
+
+            <p>The robot features a heavy-duty 4-wheel drive chassis with high-torque geared DC motors, optimized weight
+                distribution for maximum friction, and wide-tread rubber wheels for superior grip. The control system
+                employs high-current motor drivers capable of delivering sustained power during the pulling phase, with
+                strategic acceleration control to prevent wheel slip.</p>
+
+            <p>Key design objectives include maximizing torque output, optimizing weight-to-power ratio, ensuring
+                reliable traction under load, and implementing controlled power delivery for strategic advantage in the
+                best-of-three format.</p>
+
+            <div class="image-container">
+                <img src="images/arena_diagram.png" alt="Competition Arena Layout">
+                <div class="caption">Figure 1: Tug of War Arena — Flat surface with center line, two robots connected by
+                    rope</div>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 3: Design Concept -->
+        <div id="section-3" class="section">
+            <h1 class="section-title">3. Design Concept</h1>
+
+            <h2>3.1 Mechanical Design</h2>
+            <p>The robot is built on a heavy-duty steel/aluminum chassis designed for maximum rigidity and weight
+                optimization. The mechanical system focuses on torque generation and traction:</p>
+
+            <ul>
+                <li><strong>Chassis Frame:</strong> Low-profile rectangular steel frame with reinforced mounting points.
+                    Weight strategically distributed for optimal center of gravity and maximum downward force on drive
+                    wheels.</li>
+                <li><strong>Drive System:</strong> 4-wheel drive with direct-coupled high-torque DC motors. Each wheel
+                    is independently driven for maximum traction and torque distribution.</li>
+                <li><strong>Wheel Assembly:</strong> Wide rubber wheels (80-100mm diameter) with aggressive tread
+                    pattern for maximum grip. Wheel material selected for high friction coefficient on arena surface.
+                </li>
+                <li><strong>Tow Hook:</strong> Reinforced steel tow hook at front center, positioned low to prevent
+                    upward moment during pulling. Rated for forces exceeding expected pull loads.</li>
+                <li><strong>Ballast System:</strong> Removable weight plates allow fine-tuning of total weight within
+                    competition limits for optimal friction force.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/robot_structure.png" alt="Robot Structure Diagram">
+                <div class="caption">Figure 2: Robot Structure — Side view showing chassis, motors, wheels, and tow hook
+                </div>
+            </div>
+
+            <h2>3.2 Electronics & Components</h2>
+            <ul>
+                <li><strong>Arduino Uno/Mega:</strong> Main microcontroller for motor control and wireless
+                    communication.</li>
+                <li><strong>BTS7960 Motor Drivers (×2):</strong> High-current (43A) dual H-bridge drivers for handling
+                    motor stall currents.</li>
+                <li><strong>775 DC Motors (×4):</strong> High-torque 12V motors with 100:1 planetary gear reduction for
+                    maximum pulling force.</li>
+                <li><strong>Wireless Module (HC-05/NRF24L01):</strong> For remote control operation with minimal
+                    latency.</li>
+                <li><strong>Current Sensors (ACS712):</strong> Monitor motor current to detect stall conditions and
+                    prevent overheating.</li>
+                <li><strong>Power Source:</strong> 12V LiPo Battery (5000mAh, 50C) for sustained high-current delivery
+                    during pulls.</li>
+                <li><strong>Kill Switch:</strong> Emergency cutoff accessible to referees as per competition rules.</li>
+            </ul>
+
+            <div class="page-break"></div>
+
+            <div class="image-container">
+                <img src="images/drivetrain_cad.png" alt="Drivetrain CAD Design">
+                <div class="caption">Figure 3: Drivetrain CAD — High-torque motor and gear assembly</div>
+            </div>
+
+            <h2>3.3 Control Strategy</h2>
+            <p>The robot employs a power-optimized control strategy for maximum pulling effectiveness:</p>
+            <ul>
+                <li><strong>Gradual Acceleration:</strong> Prevents wheel slip at start by ramping up motor power
+                    progressively.</li>
+                <li><strong>Maximum Torque Mode:</strong> Once grip is established, motors driven at full power for
+                    sustained pull.</li>
+                <li><strong>Anti-Slip Detection:</strong> Current sensor feedback detects wheel slip; power momentarily
+                    reduced to regain traction.</li>
+                <li><strong>Burst Control:</strong> Strategic power bursts to overcome opponent's resistance at critical
+                    moments.</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 4: Working Principle -->
+        <div id="section-4" class="section">
+            <h1 class="section-title">4. Working Principle</h1>
+
+            <h2>4.1 Torque & Traction Physics</h2>
+            <p>Winning a tug of war requires maximizing the pulling force transmitted to the ground:</p>
+            <ul>
+                <li><strong>Friction Force:</strong> F = μ × N, where μ is friction coefficient and N is normal force
+                    (robot weight).</li>
+                <li><strong>Optimal Weight:</strong> Heavier robot = more friction = more pulling capacity (within
+                    competition limits).</li>
+                <li><strong>Wheel Selection:</strong> High-μ rubber compounds maximize friction on arena surface.</li>
+                <li><strong>Contact Area:</strong> Wide wheels distribute load and increase effective grip.</li>
+            </ul>
+
+            <h2>4.2 Power Delivery</h2>
+            <p>The drivetrain converts electrical power to mechanical pulling force:</p>
+            <ul>
+                <li><strong>Motor Torque:</strong> High gear reduction (100:1) multiplies motor torque at wheels.</li>
+                <li><strong>Stall Torque:</strong> Motors selected for high stall torque (the maximum torque at zero RPM
+                    during pull).</li>
+                <li><strong>Current Capacity:</strong> BTS7960 drivers handle 43A continuous, supporting motor stall
+                    currents.</li>
+                <li><strong>Battery Selection:</strong> High C-rating battery delivers sustained current without voltage
+                    sag.</li>
+            </ul>
+
+            <div class="image-container">
+                <img src="images/control_system.png" alt="Control System Architecture">
+                <div class="caption">Figure 4: Control System Block Diagram — Power delivery and motor control</div>
+            </div>
+
+            <h2>4.3 Control Logic</h2>
+            <p>The Arduino executes the following control sequence during a pull:</p>
+            <ol>
+                <li><strong>Standby:</strong> Motors off; wait for start signal from operator.</li>
+                <li><strong>Ramp Up:</strong> Gradually increase PWM from 0 to 255 over 0.5 seconds to establish grip.
+                </li>
+                <li><strong>Full Power:</strong> All motors at maximum PWM; sustained pulling force.</li>
+                <li><strong>Slip Detection:</strong> If current drops suddenly (wheel spin), reduce power briefly.</li>
+                <li><strong>Burst Mode:</strong> On operator command, momentarily increase power for tactical advantage.
+                </li>
+                <li><strong>Emergency Stop:</strong> Instant motor cutoff on kill switch activation.</li>
+            </ol>
+
+            <h2>4.4 Power Distribution Table</h2>
+            <table class="info-table">
+                <tr>
+                    <th>Phase</th>
+                    <th>Motor PWM</th>
+                    <th>Expected Current</th>
+                    <th>Duration</th>
+                </tr>
+                <tr>
+                    <td>Standby</td>
+                    <td>0</td>
+                    <td>~0A</td>
+                    <td>Until start</td>
+                </tr>
+                <tr>
+                    <td>Ramp Up</td>
+                    <td>0 → 255</td>
+                    <td>0 → 20A</td>
+                    <td>0.5 sec</td>
+                </tr>
+                <tr>
+                    <td>Full Pull</td>
+                    <td>255</td>
+                    <td>30-40A</td>
+                    <td>Until win/loss</td>
+                </tr>
+                <tr>
+                    <td>Slip Recovery</td>
+                    <td>180</td>
+                    <td>~25A</td>
+                    <td>0.2 sec</td>
+                </tr>
+                <tr>
+                    <td>Burst</td>
+                    <td>255 (boosted)</td>
+                    <td>40A+</td>
+                    <td>0.3 sec</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 5: Innovation & Features -->
+        <div id="section-5" class="section">
+            <h1 class="section-title">5. Innovation & Special Features</h1>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>High-Torque Gearboxes</h4>
+                    <p>100:1 planetary gear reduction maximizes pulling force from compact motors.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Anti-Slip Control</h4>
+                    <p>Current sensing detects wheel slip and auto-adjusts power to maintain traction.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Strategic Ballast</h4>
+                    <p>Removable weight plates allow fine-tuning robot mass for optimal friction.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Low Tow Point</h4>
+                    <p>Hook positioned at chassis base prevents tipping moment during high-force pulls.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>High-Grip Wheels</h4>
+                    <p>Wide rubber wheels with aggressive tread maximize friction on arena surface.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Burst Mode</h4>
+                    <p>Tactical power surge capability for breaking opponent's grip at critical moments.</p>
+                </div>
+            </div>
+
+            <h2>5.1 Proposed Enhancements</h2>
+            <p>Future iterations may incorporate:</p>
+            <ul>
+                <li>Encoder feedback for precise wheel slip detection and closed-loop traction control.</li>
+                <li>Temperature monitoring to prevent motor/driver overheating during prolonged pulls.</li>
+                <li>Pneumatic downforce system for increased normal force without exceeding weight limits.</li>
+                <li>Variable gear ratio system to optimize torque vs. speed based on match conditions.</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- Section 6: References -->
+        <div id="section-6" class="section references">
+            <h1 class="section-title">6. References</h1>
+            <ul>
+                <li>Pravega 2025 Tug of War Competition Rulebook — IISc Bangalore</li>
+                <li>Arduino Uno/Mega Technical Documentation</li>
+                <li>BTS7960 High-Current Motor Driver Datasheet</li>
+                <li>775 DC Motor Specifications and Torque Curves</li>
+                <li>ACS712 Current Sensor Module Documentation</li>
+                <li>LiPo Battery Safety and High-Current Discharge Guidelines</li>
+                <li>Friction and Traction Optimization in Mobile Robots — IEEE Publications</li>
+                <li>Jadavpur University Robotics Club Technical Resources</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="report-footer">
+        <p><strong>Tug of War Robot — Technical Report</strong></p>
+        <p>Team amiarinjaysarkar | Jadavpur University | Pravega 2025 — IISc Bangalore</p>
+    </div>
+
+</body>
+
+</html>
